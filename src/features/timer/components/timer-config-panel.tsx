@@ -7,7 +7,7 @@ import {
 } from "../constants";
 import type { TimerConfig, TimerSection } from "../types";
 import { createSimpleConfig } from "../utils/config";
-import { minutesToSeconds, secondsToMinutes } from "../utils/time";
+import { clampMinutes, minutesToSeconds, secondsToMinutes } from "../utils/time";
 import { SectionEditor } from "./section-editor";
 
 const modeButtonStyles = tv({
@@ -41,25 +41,28 @@ export function TimerConfigPanel({
   const isSimple = config.mode === "simple";
 
   const handleSimpleWorkChange = (minutes: number) => {
+    const clamped = clampMinutes(minutes, MIN_DURATION_MIN, MAX_DURATION_MIN);
     const updated = createSimpleConfig(
       config,
-      minutesToSeconds(minutes),
+      minutesToSeconds(clamped),
       config.sections[0].breakDurationSec,
     );
     onSetConfig(updated);
   };
 
   const handleSimpleBreakChange = (minutes: number) => {
+    const clamped = clampMinutes(minutes, MIN_DURATION_MIN, MAX_DURATION_MIN);
     const updated = createSimpleConfig(
       config,
       config.sections[0].workDurationSec,
-      minutesToSeconds(minutes),
+      minutesToSeconds(clamped),
     );
     onSetConfig(updated);
   };
 
   const handleLongBreakChange = (minutes: number) => {
-    onSetConfig({ ...config, longBreakDurationSec: minutesToSeconds(minutes) });
+    const clamped = clampMinutes(minutes, MIN_DURATION_MIN, MAX_DURATION_MIN);
+    onSetConfig({ ...config, longBreakDurationSec: minutesToSeconds(clamped) });
   };
 
   return (

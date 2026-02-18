@@ -1,4 +1,9 @@
-import { formatTime, minutesToSeconds, secondsToMinutes } from "./time";
+import {
+  clampMinutes,
+  formatTime,
+  minutesToSeconds,
+  secondsToMinutes,
+} from "./time";
 
 describe("formatTime", () => {
   it("0秒を00:00にフォーマットする", () => {
@@ -51,5 +56,35 @@ describe("secondsToMinutes", () => {
 
   it("90秒を1分に変換する（切り捨て）", () => {
     expect(secondsToMinutes(90)).toBe(1);
+  });
+});
+
+describe("clampMinutes", () => {
+  it("範囲内の値はそのまま返す", () => {
+    expect(clampMinutes(25, 1, 60)).toBe(25);
+  });
+
+  it("最小値より小さい場合は最小値を返す", () => {
+    expect(clampMinutes(0, 1, 60)).toBe(1);
+  });
+
+  it("マイナス値は最小値を返す", () => {
+    expect(clampMinutes(-5, 1, 60)).toBe(1);
+  });
+
+  it("最大値より大きい場合は最大値を返す", () => {
+    expect(clampMinutes(100, 1, 60)).toBe(60);
+  });
+
+  it("最小値ちょうどはそのまま返す", () => {
+    expect(clampMinutes(1, 1, 60)).toBe(1);
+  });
+
+  it("最大値ちょうどはそのまま返す", () => {
+    expect(clampMinutes(60, 1, 60)).toBe(60);
+  });
+
+  it("NaNの場合は最小値を返す", () => {
+    expect(clampMinutes(NaN, 1, 60)).toBe(1);
   });
 });

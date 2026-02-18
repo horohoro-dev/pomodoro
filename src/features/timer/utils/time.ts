@@ -11,3 +11,8 @@ export function minutesToSeconds(minutes: number): number {
 export function secondsToMinutes(seconds: number): number {
   return Math.floor(seconds / 60);
 }
+
+export function clampMinutes(value: number, min: number, max: number): number {
+  if (Number.isNaN(value)) return min;
+  return Math.max(min, Math.min(max, value));
+}

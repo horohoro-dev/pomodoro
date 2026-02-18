@@ -1,6 +1,6 @@
 import { MAX_DURATION_MIN, MIN_DURATION_MIN } from "../constants";
 import type { TimerSection } from "../types";
-import { minutesToSeconds, secondsToMinutes } from "../utils/time";
+import { clampMinutes, minutesToSeconds, secondsToMinutes } from "../utils/time";
 
 type SectionEditorProps = {
   section: TimerSection;
@@ -34,7 +34,9 @@ export function SectionEditor({
           value={secondsToMinutes(section.workDurationSec)}
           onChange={(e) =>
             onUpdate(section.id, {
-              workDurationSec: minutesToSeconds(Number(e.target.value)),
+              workDurationSec: minutesToSeconds(
+                clampMinutes(Number(e.target.value), MIN_DURATION_MIN, MAX_DURATION_MIN),
+              ),
             })
           }
           className="w-16 rounded border border-gray-300 px-2 py-1 text-center text-sm"
@@ -53,7 +55,9 @@ export function SectionEditor({
           value={secondsToMinutes(section.breakDurationSec)}
           onChange={(e) =>
             onUpdate(section.id, {
-              breakDurationSec: minutesToSeconds(Number(e.target.value)),
+              breakDurationSec: minutesToSeconds(
+                clampMinutes(Number(e.target.value), MIN_DURATION_MIN, MAX_DURATION_MIN),
+              ),
             })
           }
           className="w-16 rounded border border-gray-300 px-2 py-1 text-center text-sm"
